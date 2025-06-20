@@ -14,6 +14,8 @@ Abaisseur de tension (buck converter) pour adapter la tension batterie (12V) à 
 
 Batterie (ex. 12V)
 
+Caméra Cognex
+
 ⚡ Principe de fonctionnement :
 Les relais servent à inverser la polarité des moteurs pour les faire tourner dans un sens ou dans l’autre.
 
