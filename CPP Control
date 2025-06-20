@@ -1,0 +1,191 @@
+char t;  // Variable pour stocker le caractère reçu via Bluetooth
+
+// Définition des broches numériques utilisées
+const int D2 = 9;
+const int D3 = 8;
+const int D4 = 7;
+const int D5 = 6;
+const int D6 = 5;
+const int D7 = 4;
+const int D8 = 3;
+const int D9 = 2;
+const int D11 = 11;  // Broche PWM pour contrôler la vitesse des moteurs
+
+// Affectation des relais aux broches
+int relais1 = D2;
+int relais2 = D3;
+int relais3 = D4;
+int relais4 = D5;
+int relais5 = D6;
+int relais6 = D7;
+int relais7 = D8;
+int relais8 = D9;
+
+void setup() {
+  Serial.begin(9600);  // Démarrer la communication série avec le module Bluetooth
+
+  // Définir toutes les broches des relais comme sorties
+  pinMode(relais1, OUTPUT);
+  pinMode(relais2, OUTPUT);
+  pinMode(relais3, OUTPUT);
+  pinMode(relais4, OUTPUT);
+  pinMode(relais5, OUTPUT);
+  pinMode(relais6, OUTPUT);
+  pinMode(relais7, OUTPUT);
+  pinMode(relais8, OUTPUT);
+  pinMode(D11, OUTPUT); // PWM pour vitesse
+}
+
+// Fonction pour avancer tout droit
+void fwd() {
+  digitalWrite(relais1, LOW);
+  digitalWrite(relais2, HIGH);
+  digitalWrite(relais3, HIGH);
+  digitalWrite(relais4, LOW);
+  digitalWrite(relais5, HIGH);
+  digitalWrite(relais6, LOW);
+  digitalWrite(relais7, HIGH);
+  digitalWrite(relais8, LOW);
+  analogWrite(D11, 255);
+}
+
+// Fonction pour reculer
+void rev() {
+  digitalWrite(relais1, HIGH);
+  digitalWrite(relais2, LOW);
+  digitalWrite(relais3, LOW);
+  digitalWrite(relais4, HIGH);
+  digitalWrite(relais5, LOW);
+  digitalWrite(relais6, HIGH);
+  digitalWrite(relais7, LOW);
+  digitalWrite(relais8, HIGH);
+  analogWrite(D11, 255);
+}
+
+// Tourner à gauche
+void left() {
+  digitalWrite(relais1, LOW);
+  digitalWrite(relais2, HIGH);
+  digitalWrite(relais3, LOW);
+  digitalWrite(relais4, HIGH);
+  digitalWrite(relais5, HIGH);
+  digitalWrite(relais6, LOW);
+  digitalWrite(relais7, LOW);
+  digitalWrite(relais8, HIGH);
+  analogWrite(D11, 255);
+}
+
+// Tourner à droite
+void right() {
+  digitalWrite(relais1, HIGH);
+  digitalWrite(relais2, LOW);
+  digitalWrite(relais3, HIGH);
+  digitalWrite(relais4, LOW);
+  digitalWrite(relais5, LOW);
+  digitalWrite(relais6, HIGH);
+  digitalWrite(relais7, HIGH);
+  digitalWrite(relais8, LOW);
+  analogWrite(D11, 255);
+}
+
+// Tourner légèrement à gauche (virage gauche)
+void vleft() {
+  digitalWrite(relais1, LOW);
+  digitalWrite(relais2, HIGH);
+  digitalWrite(relais3, LOW);
+  digitalWrite(relais4, LOW);
+  digitalWrite(relais5, HIGH);
+  digitalWrite(relais6, LOW);
+  digitalWrite(relais7, LOW);
+  digitalWrite(relais8, HIGH);
+}
+
+// Tourner légèrement à droite (virage droite)
+void vright() {
+  digitalWrite(relais1, LOW);
+  digitalWrite(relais2, LOW);
+  digitalWrite(relais3, HIGH);
+  digitalWrite(relais4, LOW);
+  digitalWrite(relais5, LOW);
+  digitalWrite(relais6, HIGH);
+  digitalWrite(relais7, HIGH);
+  digitalWrite(relais8, LOW);
+  analogWrite(D11, 255);
+}
+
+// Tourner en arrière vers la gauche
+void REVERSleft() {
+  digitalWrite(relais1, LOW);
+  digitalWrite(relais2, LOW);
+  digitalWrite(relais3, LOW);
+  digitalWrite(relais4, HIGH);
+  digitalWrite(relais5, HIGH);
+  digitalWrite(relais6, LOW);
+  digitalWrite(relais7, LOW);
+  digitalWrite(relais8, LOW);
+}
+
+// Tourner en arrière vers la droite
+void REVERSright() {
+  digitalWrite(relais1, HIGH);
+  digitalWrite(relais2, LOW);
+  digitalWrite(relais3, LOW);
+  digitalWrite(relais4, LOW);
+  digitalWrite(relais5, LOW);
+  digitalWrite(relais6, HIGH);
+  digitalWrite(relais7, HIGH);
+  digitalWrite(relais8, LOW);
+}
+
+// Arrêter tous les moteurs
+void stp() {
+  digitalWrite(relais1, LOW);
+  digitalWrite(relais2, LOW);
+  digitalWrite(relais3, LOW);
+  digitalWrite(relais4, LOW);
+  digitalWrite(relais5, LOW);
+  digitalWrite(relais6, LOW);
+  digitalWrite(relais7, LOW);
+  digitalWrite(relais8, LOW);
+  analogWrite(D11, 255);
+}
+
+void loop() {
+  t = Serial.read();  // Lire le caractère depuis le module Bluetooth
+  Serial.println(t);  // Affiche le caractère reçu
+
+  if (Serial.available() > 0) {
+    t = Serial.read();
+    Serial.println(t);
+
+    // Selon la commande reçue, exécute une direction
+    if (t == 'F') {
+      fwd();
+      Serial.println("fwd()");
+    } else if (t == 'L') {
+      left();
+      Serial.println("left()");
+    } else if (t == 'G') {
+      vleft();
+      Serial.println("vleft()");
+    } else if (t == 'I') {
+      vright();
+      Serial.println("vright()");
+    } else if (t == 'R') {
+      right();
+      Serial.println("right()");
+    } else if (t == 'B') {
+      rev();
+      Serial.println("rev()");
+    } else if (t == 'J') {
+      REVERSright();
+      Serial.println("REVERSright()");
+    } else if (t == 'H') {
+      REVERSleft();
+      Serial.println("REVERSleft()");
+    } else {
+      stp();
+      Serial.println("stp()");
+    }
+  }
+}
